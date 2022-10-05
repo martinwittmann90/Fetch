@@ -158,41 +158,47 @@ function constructor()
     difgolcra.innerText = parseInt(golescra.innerText) - parseInt(golesconcra.innerText)
     difgolale.innerText = parseInt(golesale.innerText) - parseInt(golesconale.innerText)
     difgoljap.innerText = parseInt(golesjap.innerText) - parseInt(golesconjap.innerText)
-        //CALCULO PUNTOS GRUPO F
-        ptosbel.innerText = parseInt(teamlocal32.value) + parseInt(teamlocal33.value) + parseInt(teamvisita35.value) 
-        ptoscan.innerText = parseInt(teamvisita32.value) + parseInt(teamvisita34.value) + parseInt(teamlocal36.value)
-        ptosmar.innerText = parseInt(teamlocal31.value) + parseInt(teamvisita33.value) + parseInt(teamvisita36.value)
-        ptoscro.innerText = parseInt(teamvisita31.value) + parseInt(teamlocal34.value) + parseInt(teamlocal35.value)
-        //CALCULO GOLES A FAVOR GRUPO F
-        golesbel.innerText = parseInt(equipoLocal32.value) + parseInt(equipoLocal33.value) + parseInt(equipoVisitante35.value)
-        golescan.innerText = parseInt(equipoVisitante32.value) + parseInt(equipoVisitante34.value) + parseInt(equipoLocal36.value)
-        golesmar.innerText = parseInt(equipoLocal31.value) + parseInt(equipoVisitante33.value) + parseInt(equipoVisitante36.value)
-        golescro.innerText = parseInt(equipoVisitante31.value) + parseInt(equipoLocal34.value) + parseInt(equipoLocal35.value)
-        //CALCULO GOLES EN CONTRA GRUPO F
-        golesconbel.innerText = parseInt(equipoVisitante32.value) + parseInt(equipoVisitante33.value) + parseInt(equipoLocal35.value)
-        golesconcan.innerText = parseInt(equipoLocal32.value) + parseInt(equipoLocal34.value) + parseInt(equipoVisitante36.value)
-        golesconmar.innerText = parseInt(equipoVisitante31.value) + parseInt(equipoLocal33.value) + parseInt(equipoLocal36.value)
-        golesconcro.innerText = parseInt(equipoLocal31.value) + parseInt(equipoVisitante34.value) + parseInt(equipoVisitante35.value)
-        //DIFERENCIA GOLES GRUPO F
-        difgolbel.innerText = parseInt(golesbel.innerText) - parseInt(golesconbel.innerText)
-        difgolcan.innerText = parseInt(golescan.innerText) - parseInt(golesconcan.innerText)
-        difgolmar.innerText = parseInt(golesmar.innerText) - parseInt(golesconmar.innerText)
-        difgolcro.innerText = parseInt(golescro.innerText) - parseInt(golesconcro.innerText)
+    //CALCULO PUNTOS GRUPO F
+    ptosbel.innerText = parseInt(teamlocal32.value) + parseInt(teamlocal33.value) + parseInt(teamvisita35.value) 
+    ptoscan.innerText = parseInt(teamvisita32.value) + parseInt(teamvisita34.value) + parseInt(teamlocal36.value)
+    ptosmar.innerText = parseInt(teamlocal31.value) + parseInt(teamvisita33.value) + parseInt(teamvisita36.value)
+    ptoscro.innerText = parseInt(teamvisita31.value) + parseInt(teamlocal34.value) + parseInt(teamlocal35.value)
+    //CALCULO GOLES A FAVOR GRUPO F
+    golesbel.innerText = parseInt(equipoLocal32.value) + parseInt(equipoLocal33.value) + parseInt(equipoVisitante35.value)
+    golescan.innerText = parseInt(equipoVisitante32.value) + parseInt(equipoVisitante34.value) + parseInt(equipoLocal36.value)
+    golesmar.innerText = parseInt(equipoLocal31.value) + parseInt(equipoVisitante33.value) + parseInt(equipoVisitante36.value)
+    golescro.innerText = parseInt(equipoVisitante31.value) + parseInt(equipoLocal34.value) + parseInt(equipoLocal35.value)
+    //CALCULO GOLES EN CONTRA GRUPO F
+    golesconbel.innerText = parseInt(equipoVisitante32.value) + parseInt(equipoVisitante33.value) + parseInt(equipoLocal35.value)
+    golesconcan.innerText = parseInt(equipoLocal32.value) + parseInt(equipoLocal34.value) + parseInt(equipoVisitante36.value)
+    golesconmar.innerText = parseInt(equipoVisitante31.value) + parseInt(equipoLocal33.value) + parseInt(equipoLocal36.value)
+    golesconcro.innerText = parseInt(equipoLocal31.value) + parseInt(equipoVisitante34.value) + parseInt(equipoVisitante35.value)
+    //DIFERENCIA GOLES GRUPO F
+    difgolbel.innerText = parseInt(golesbel.innerText) - parseInt(golesconbel.innerText)
+    difgolcan.innerText = parseInt(golescan.innerText) - parseInt(golesconcan.innerText)
+    difgolmar.innerText = parseInt(golesmar.innerText) - parseInt(golesconmar.innerText)
+    difgolcro.innerText = parseInt(golescro.innerText) - parseInt(golesconcro.innerText)
         
 parseInt('') === 0 
   });} 
 
+let database = 'valores_de_input'
 
-//DECLARO DIFERENTES VARIABLES Y OBJETOS
+const getData = async () => {
+  const res = await localStorage[database] ? JSON.parse(localStorage[database]) : []
+  return res
+}
+const setData = (data) => {
+  localStorage[database] = JSON.stringify(data)
+}
 const mainId = "contenido";
 const url = location.href;
 let main = document.querySelector(`#${mainId}`);
 
-const valorDeInput = localStorage.getItem("valores_de_input");
-
 const datosFormulario = [];
 
 const nombreCompleto = document.getElementById("entername");
+const email = document.getElementById("email");
 //GOLES GRUPO A - FECHA 1
 const qatar1 = document.getElementById("equipoLocal1");
 const ecuador1 = document.getElementById("equipoVisitante1");
@@ -442,17 +448,21 @@ const puntosGhana1 = document.getElementById("teamvisita44");
 const puntosGhana2 = document.getElementById("teamvisita45");
 const puntosGhana3 = document.getElementById("teamlocal48");
 
-
+const obtenerDatos = async () => {
+  const datos = await getData()
+  nombreCompleto.value = datos[0].nombre
+  email.value = datos[0].correo
+}
 
 const btnenvio = document.getElementById("enviar");
 const btnguardo = document.getElementById("guardar");
 
-btnguardo.addEventListener("click", (e) => {
-    e.preventDefault();
+const save = () => {
 
     const DatosFinales = {
         //NOMBRE DEL PARTICIPANTE
         Nombre: nombreCompleto.value,
+        Correo: email.value,
         //PUNTOS GRUPO A
         GAPuntosQatar: parseInt(puntosQatar1.value)+parseInt(puntosQatar2.value)+parseInt(puntosQatar3.value),
         GAPuntosEcuador: parseInt(puntosEcuador1.value)+parseInt(puntosEcuador2.value)+parseInt(puntosEcuador3.value),
@@ -566,37 +576,70 @@ btnguardo.addEventListener("click", (e) => {
         CoreaDelSurVsPortugal: corea3.value+"-"+portugal3.value,
         GhanaVsUruguay: ghana3.value+"-"+uruguay3.value,
 };
-    datosFormulario.push(DatosFinales);
-    localStorage.setItem("valores_de_input", JSON.stringify(datosFormulario));
+datosFormulario.push(DatosFinales);
+localStorage.setItem("valores_de_input", JSON.stringify(datosFormulario));
+setData(datosFormulario)
+
+Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: '¡Sus datos han sido guardados!',
+  showConfirmButton: false,
+  timer: 1500
+})
+}
+
+btnguardo.addEventListener("click", (e) => {
+e.preventDefault();
+save()
 });
 
-    btnenvio.addEventListener('click', (event) => {
-        event.preventDefault();
 
+btnenvio.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  save()
         
-    const DatosFinales = {
-        nombre: nombreCompleto.value,
-        nacimiento: fechaNacimiento.value,
-        correo: email.value,
-        telefono: telefono.value,
-        curso: curso.value,
-        precio_curso: precioCurso,
-        cuotas: cuotas.value,
-        precio_cuota: precioCuotas,
-        paises: paises.value,
-    };
-
-    datosFormulario.push(DatosFinales);
-
-    localStorage.setItem("valores_de_input", JSON.stringify(datosFormulario)); 
-
         let params = {
-            public_key: 'KGXHxfAUgsoEayl8K',
-            service_id: 'service_r0db0vd',
-            template_id: 'template_kl38lkg',
+          user_id: 'SAaxbiXrUyQfe-Br7',
+          service_id: 'service_ot5g91i',
+          template_id: 'template_szd70mr',
             template_params: {
+                to_Nombre: nombreCompleto.value,
                 to_email: email.value,
-                from_name: "Formulario",
+                to_GAPuntosQatar: parseInt(puntosQatar1.value)+parseInt(puntosQatar2.value)+parseInt(puntosQatar3.value),
+                to_GAPuntosEcuador: parseInt(puntosEcuador1.value)+parseInt(puntosEcuador2.value)+parseInt(puntosEcuador3.value),
+                to_GAPuntosSenegal: parseInt(puntosSenegal1.value)+parseInt(puntosSenegal2.value)+parseInt(puntosSenegal3.value),
+                to_GAPuntosPaisesBajos: parseInt(puntosPaisesBajos1.value)+parseInt(puntosPaisesBajos2.value)+parseInt(puntosPaisesBajos3.value),
+                to_GBPuntosInglaterra: parseInt(puntosInglaterra1.value)+parseInt(puntosInglaterra2.value)+parseInt(puntosInglaterra3.value),
+                to_GBPuntosIran: parseInt(puntosIran1.value)+parseInt(puntosIran2.value)+parseInt(puntosIran3.value),
+                to_GBPuntosEEUU: parseInt(puntosEeuu1.value)+parseInt(puntosEeuu2.value)+parseInt(puntosEeuu3.value),
+                to_GBPuntosGales: parseInt(puntosGales1.value)+parseInt(puntosGales2.value)+parseInt(puntosGales3.value),
+                to_GCPuntosArgentina: parseInt(puntosArgentina1.value)+parseInt(puntosArgentina2.value)+parseInt(puntosArgentina3.value),
+                to_GCPuntosArabiaSaudita: parseInt(puntosArabia1.value)+parseInt(puntosArabia2.value)+parseInt(puntosArabia3.value),
+                to_GCPuntosMexico: parseInt(puntosMexico1.value)+parseInt(puntosMexico2.value)+parseInt(puntosMexico3.value),
+                to_GCPuntosPolonia: parseInt(puntosPolonia1.value)+parseInt(puntosPolonia2.value)+parseInt(puntosPolonia3.value),
+                to_GDPuntosFrancia: parseInt(puntosFrancia1.value)+parseInt(puntosFrancia2.value)+parseInt(puntosFrancia3.value),
+                to_GDPuntosAustralia: parseInt(puntosAustralia1.value)+parseInt(puntosAustralia2.value)+parseInt(puntosAustralia3.value),
+                to_GDPuntosDinamarca: parseInt(puntosDinamarca1.value)+parseInt(puntosDinamarca2.value)+parseInt(puntosDinamarca3.value),
+                to_GDPuntosTunez: parseInt(puntosTunez1.value)+parseInt(puntosTunez2.value)+parseInt(puntosTunez3.value),
+                to_GEPuntosAlemania: parseInt(puntosAlemania1.value)+parseInt(puntosAlemania2.value)+parseInt(puntosAlemania3.value),
+                to_GEPuntosJapon: parseInt(puntosJapon1.value)+parseInt(puntosJapon2.value)+parseInt(puntosJapon3.value),
+                to_GEPuntosEspaña: parseInt(puntosEspaña1.value)+parseInt(puntosEspaña2.value)+parseInt(puntosEspaña3.value),
+                to_GEPuntosCostaRica: parseInt(puntosCosta1.value)+parseInt(puntosCosta2.value)+parseInt(puntosCosta3.value),
+                to_GFPuntosMarruecos: parseInt(puntosMarruecos1.value)+parseInt(puntosMarruecos2.value)+parseInt(puntosMarruecos3.value),
+                to_GFPuntosCroacia: parseInt(puntosCroacia1.value)+parseInt(puntosCroacia2.value)+parseInt(puntosCroacia3.value),
+                to_GFPuntosBelgica: parseInt(puntosBelgica1.value)+parseInt(puntosBelgica2.value)+parseInt(puntosBelgica3.value),
+                to_GFPuntosCanada: parseInt(puntosCanada1.value)+parseInt(puntosCanada2.value)+parseInt(puntosCanada3.value),
+                to_GGPuntosSuiza: parseInt(puntosSuiza1.value)+parseInt(puntosSuiza2.value)+parseInt(puntosSuiza3.value),
+                to_GGPuntosCamerun: parseInt(puntosCamerun1.value)+parseInt(puntosCamerun2.value)+parseInt(puntosCamerun3.value),
+                to_GGPuntosBrasil: parseInt(puntosBrasil1.value)+parseInt(puntosBrasil2.value)+parseInt(puntosBrasil3.value),
+                to_GGPuntosSerbia: parseInt(puntosSerbia1.value)+parseInt(puntosSerbia2.value)+parseInt(puntosSerbia3.value),
+                to_GHPuntosPortugal: parseInt(puntosPortugal1.value)+parseInt(puntosPortugal2.value)+parseInt(puntosPortugal3.value),
+                to_GHPuntosGhana: parseInt(puntosGhana1.value)+parseInt(puntosGhana2.value)+parseInt(puntosGhana3.value),
+                to_GHPuntosUruguay: parseInt(puntosUruguay1.value)+parseInt(puntosUruguay2.value)+parseInt(puntosUruguay3.value),
+                to_GHPuntosCoreaDelSur: parseInt(puntosCorea1.value)+parseInt(puntosCorea2.value)+parseInt(puntosCorea3.value),
+/*              from_name: "Formulario",
                 to_name: nombreCompleto.value,
                 message: curso.value,
                 p_curso: precioCurso,
@@ -606,7 +649,7 @@ btnguardo.addEventListener("click", (e) => {
                 f_nacimiento: fechaNacimiento.value,
                 to_telefono: telefono.value,
                 to_pais: paises.value,
-                to_curso: curso.value,}};
+                to_curso: curso.value, */}};
 
         let headers = {
             'Content-type': 'application/json'};
@@ -615,27 +658,32 @@ btnguardo.addEventListener("click", (e) => {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(params)};
-        fetch('https://api.emailjs.com/api/v1.0/email/send', options)
-          .then((httpResponse) => {
-              if (httpResponse.ok) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: '¡Sus datos han sido enviados!',
-                    showConfirmButton: false,
-                    timer: 1500 })
-              } else {
-                  return httpResponse.text()
-                    .then(text => Promise.reject(text));
-              }})
-          .catch((error) => {
-              console.log('Oops... ' + error);});});
+  fetch('https://api.emailjs.com/api/v1.0/email/send', options)
+    .then((httpResponse) => {
+      if (httpResponse.ok) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: '¡Sus datos han sido enviados!',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        return httpResponse.text()
+          .then(text => Promise.reject(text));
+      }
+    })
+    .catch((error) => {
+      console.log('Oops... ' + error);
+    });
+});
+obtenerDatos()
 
-              btnguardo.addEventListener('click', () => {
-                swal({
-                  title: "Ya estas participando!",
-                  text: "Tus resultados han sido guardados!",
-                  icon: "success",
-                });
-                })
+btnguardo.addEventListener('click', () => {
+  swal({
+    title: "Ya estas participando!",
+    text: "Tus resultados han sido guardados!",
+    icon: "success",
+  });
+  })
             
